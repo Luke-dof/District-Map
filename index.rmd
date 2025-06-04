@@ -25,3 +25,5 @@ leaflet(Dist_shapefile) %>%
     fillOpacity = 0.7, label = labels
   )
 ```
+
+<iframe src="Ithaca-map.html" height="500" width="500"></iframe>
