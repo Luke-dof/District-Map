@@ -1,0 +1,24 @@
+---
+title: "Test Leaflet Map"
+format: html
+---
+
+```{r}
+renv::deactivate()
+HOME="C:\\Mapping Projects\\District Maps - Individual\\DistMap"
+# Load required libraries
+library(leaflet)
+library(knitr)
+library(rmarkdown)
+library(yaml)
+
+# Create and render a simple leaflet map
+leaflet() %>%
+  addTiles() %>%
+  addMarkers(
+    lng = -73.9851,
+    lat = 40.7580,
+    popup = "Times Square"
+  )
+```
+---

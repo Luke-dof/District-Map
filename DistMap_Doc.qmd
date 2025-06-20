@@ -1,0 +1,62 @@
+---
+title: "FY27 Assessor District Map"
+format:
+  html:
+    code-fold: false
+    code-tools: false
+    echo: false
+editor: visual
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
+HOME="C:\\Mapping Projects\\District Maps - Individual\\DistMap"
+# Load libraries
+library(leaflet)
+library(htmltools)
+library(magrittr)
+library(sf)
+
+# Define paths
+shapefile_path1 <- "C:/Mapping Projects/District Maps - Individual/Shapefiles/FY27_District_Boundaries.shp"
+shapefile_path2 <- "C:/Mapping Projects/District Maps - Individual/2025-26 (FY27)/GIS/FY26_Blocks.shp"
+
+# Import the shapefile
+Dist_shapefile = sf::st_read(shapefile_path1) %>% 
+  st_transform(crs=4326)
+Blocks = sf::st_read(shapefile_path2) %>% 
+  st_transform(crs=4326)
+
+# Create labels
+labels <- sprintf("District: %s", Dist_shapefile$NewDist) %>% lapply(htmltools::HTML)
+block_labels <- sprintf("Block: %s", Blocks$BLOCK) %>% lapply(htmltools::HTML)
+
+# Color palette
+pal <- colorFactor("Spectral", domain = Dist_shapefile$NewDist, n = 11)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Create and return map
+leaflet(Dist_shapefile) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~pal(NewDist),
+    weight = 2,
+    opacity = 1,
+    color = "white",
+    dashArray = "3",
+    fillOpacity = 0.7,
+    highlightOptions = highlightOptions(
+      weight = 5,
+      color = "#666",
+      dashArray = "",
+      fillOpacity = 0.7,
+      bringToFront = TRUE
+    ),
+    label = labels,
+    labelOptions = labelOptions(
+      style = list("font-weight" = "normal", padding = "3px 8px"),
+      textsize = "15px",
+      direction = "auto"
+    )
+  )
+```
